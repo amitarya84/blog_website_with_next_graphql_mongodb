@@ -1,0 +1,27 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+    background-color: #008080;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: white;
+
+    .logo {
+        font-size: 2rem;
+    }
+
+    ul {
+        display: flex;
+
+        li {
+            cursor: pointer;
+            list-style-type: none;
+            margin: 5px 10px;
+            font-size: 1.25rem;
+        }
+    }
+}

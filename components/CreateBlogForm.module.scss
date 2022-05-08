@@ -1,0 +1,67 @@
+.formControl{
+    margin: 50px auto;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.01);
+
+    h2{
+        text-align: center;
+    }
+
+    input, textarea{
+        width: 100%;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        font-family: unset;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+
+        &:focus,
+        &:active{
+            // border: 2px solid #008080;
+            outline: 2px solid #008080;
+            background-color: #e0eeee;
+        }
+
+        &[type=file]{
+            border: none;
+            outline: none;
+        }
+    }
+    textarea{
+        width: 100%;
+    }
+    input[type=file]{
+        width: fit-content;
+    }
+
+    figure{
+        padding: 0;
+        margin: 20px auto;
+        .previewImage{
+            width: 40%;
+            margin: 0;
+        }
+    }
+}
+
+.outline{
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.postBlogBtn{
+    background-color: #008080;
+    border: #008080;
+    outline: #008080;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.2rem;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+}

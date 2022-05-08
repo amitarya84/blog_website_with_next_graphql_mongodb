@@ -1,0 +1,14 @@
+.outlineBtn{
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    background-color: transparent;
+    border: 1px solid #008080;
+    border-radius: 5px;
+    color: #008080;
+    cursor: pointer;
+    transition: 0.3s ease;
+
+    &:hover{
+        background-color: #c5ffff;
+    }
+}
