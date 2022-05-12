@@ -1,6 +1,11 @@
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
 import styles from '../styles/Home.module.scss';
 
 const Id = ({blog}) => {
+
+    const router = useRouter();
 
     // let paraParts = blog.blogText.split('\n');
     // let paraText = '';
@@ -8,14 +13,17 @@ const Id = ({blog}) => {
     //     paraText = paraText+part+'&#013;'
     // })
 
-
-
     return (
+        <>
+        <Head>
+            <title>{blog.title}</title>
+        </Head>
         <div className={styles.blog}>
             {blog.imageName && <img className={styles.image} src={'uploads/'+blog.imageName} alt="blog image" />}
             <h1 className={styles.title}>{blog.title}</h1>
             <div className={styles.paragraph}>{blog.blogText}</div>
         </div>
+        </>
     );
 }
 
@@ -48,7 +56,7 @@ export const getServerSideProps = async (req) => {
 
     return {
         props: {
-            blog: data.data.singleBlog
+            blog: data.data.singleBlog,
         }
     }
 }

@@ -5,10 +5,11 @@ import axios from 'axios';
 
 
 const CreateBlogForm = ({ submitHandler }) => {
+    const [loading, setLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState();
-    const [title, setTitle] = useState();
+    const [title, setTitle] = useState('');
     const [imageFile, setImageFile] = useState();
-    const [para, setPara] = useState();
+    const [para, setPara] = useState('');
 
     function titleChangeHandler(e) {
         setTitle(e.target.value)
@@ -36,47 +37,43 @@ const CreateBlogForm = ({ submitHandler }) => {
         // console.log(title)
         // console.log(imageFile)
         // console.log(para)
+        
+        let validated = (title.trim() && para.trim());
+        
+        if (validated) {
+            setLoading(true)
 
-        let formdata = new FormData();
+            let formdata = new FormData();
 
-        formdata.append('title', title);
-        formdata.append('imageFile', imageFile);
-        formdata.append('paragraph', para);
+            formdata.append("title", title);
+            formdata.append("imageFile", imageFile);
+            formdata.append("paragraph", para);
 
+            const config = {
+                headers: { "content-type": "multipart/form-data" },
+                onUploadProgress: (event) => {
+                    console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
+                },
+            };
 
-        // fetch('/api/addBlog', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'multipart/form-data' },
-        //     body: formdata
-        // }).then(res => res.json())
-        // .then(data => console.log(data))
-        // .catch(err => console.log('Api Error:', err))
-
-        // const res = await axios.post('/api/addBlog', {
-        //     body: formdata
-        // });
-
-        // const data = await res.json();
-
-
-
-        const config = {
-            headers: { 'content-type': 'multipart/form-data' },
-            onUploadProgress: (event) => {
-                console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
-            },
-        };
-
-        axios.post('/api/addBlog', formdata, config)
-            .then(res => Router.push('/'+res.data._id))
-            .catch(err => {
-                console.log(err)
-            })
+            axios.post('/api/addBlog', formdata, config)
+                .then(res => {
+                    setLoading(false)
+                    Router.push(`/${res.data._id}`)
+                })
+                .catch(err => {
+                    setLoading(false)
+                    console.log(err)
+                })
+        }else{
+            alert('Please fill the form first!')
+        }
 
     }
+    
     return (
         <form onSubmit={submitHandler} className={styles.formControl}>
-            <h2>Let's create a blog!!</h2>
+            <h2>Let&apos;s create a blog!!</h2>
             <label >
                 <input onChange={titleChangeHandler} type="text" placeholder='Enter Blog Title..' />
             </label>
@@ -92,7 +89,7 @@ const CreateBlogForm = ({ submitHandler }) => {
                 <textarea onChange={paragraphChangeHandler} name="blog-paragraph" id="blogPara" cols="30" rows="10" placeholder='Enter Paragraph..'></textarea>
             </label>
             <br /><br />
-            <button className={styles.postBlogBtn}>Post Blog</button>
+            <button className={styles.postBlogBtn} style={loading ? { backgroundColor: 'gray' } : {}}>Post Blog</button>
         </form>
     );
 }

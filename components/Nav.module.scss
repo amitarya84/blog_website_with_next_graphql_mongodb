@@ -20,8 +20,25 @@
         li {
             cursor: pointer;
             list-style-type: none;
-            margin: 5px 10px;
+            margin: 5px 5px;
             font-size: 1.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            animation: enterIn 0.3s ease;
+
+            &:hover, &.activeNavLink{
+                background-color: #009e9e
+            }
+            
+            @keyframes enterIn {
+                0%{
+                    opacity: 0;
+                }
+                100%{
+                    opacity: 1;
+                }
+            }
         }
     }
 }
+

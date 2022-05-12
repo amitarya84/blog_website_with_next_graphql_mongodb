@@ -8,9 +8,15 @@ export const typeDefs = gql`
         blogText: String
     }
 
+    type Login {
+        username: String,
+        token: String
+    }
+
     type Query {
         blogs: [Blog]!
         singleBlog(id: String!): Blog
+        login(username: String!, password: String!): Login
     }
 
     type Mutation {
