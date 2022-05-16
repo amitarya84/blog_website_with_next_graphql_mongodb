@@ -1,53 +1,76 @@
 import Head from 'next/head';
 // import { useRouter } from 'next/router';
 import { MongoClient } from 'mongodb';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from '../styles/Home.module.scss'
-import LoadingSpinner from '../components/UI/LoadingSpinner'
-import Blog from '../components/Blog';
+import BlogCard from '../components/BlogCard';
 
 
-
-export default function Home({ blogs }) {
+export default function Home({ blogsData }) {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   // const router = useRouter();
+  const topPostsRow = useRef();
+  const featuredPostsRow = useRef();
 
   useEffect(() => {
-    setPosts(blogs)
-  }, [blogs]);
+    //converting as javascript object
+    const blogPosts = JSON.parse(blogsData);
 
-  useEffect(() => {
-    setLoading(true)
-    let query = `
-      query Query {
-        blogs {
-        _id,
-        title,
-        imageName,
-        blogText
-      }
-    }
-    `
-    fetch('/api/graphql', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: query
-      })
+    blogPosts.forEach(blogData => {
+      let post = blogData.post;
+      post._id = post._id.toString();
+      post['img'] = post.imageName;
     })
-      .then(res => res.json())
-      .then(data => {
-        setLoading(false);
-        setPosts(data.data.blogs)
+    setPosts((blogPosts))
+    // console.log(blogPosts)
+  }, [blogsData]);
 
-      }).catch(err => {
-        setLoading(false);
-        console.log(err)
-      })
+  // useEffect(() => {
+  //   setLoading(true);
 
-  }, [])
+  //   let query = `
+  //     query Query {
+  //       blogs {
+  //       _id,
+  //       title,
+  //       imageName,
+  //       blogText
+  //     }
+  //   }
+  //   `;
 
+  //   fetch('/api/graphql', {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       query: query
+  //     })
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setLoading(false);
+  //       setPosts(data.data.blogs)
+
+  //     }).catch(err => {
+  //       setLoading(false);
+  //       console.log(err)
+  //     })
+
+  // }, [])
+
+  const slideForwardTopPosts = () => {
+    topPostsRow.current.scrollBy(350, 0)
+  }
+  const slideBackwardTopPosts = () => {
+    topPostsRow.current.scrollBy(-350, 0)
+  }
+  const slideForwardFeaturedPosts = () => {
+    featuredPostsRow.current.scrollBy(350, 0)
+  }
+  const slideBackwardFeaturedPosts = () => {
+    featuredPostsRow.current.scrollBy(-350, 0)
+  }
 
 
   return (
@@ -57,36 +80,42 @@ export default function Home({ blogs }) {
         <meta name="description" content="Blog website" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Test /> */}
-
 
       <main>
-        <div className="blogs">
-          {(posts?.length < 1) ? <h2 className={styles.noPost}>No Posts to Read</h2> : ''}
-          {
-            (posts?.length > 0) &&
-            posts.map(
-              blog => <Blog
-              key={blog._id}
-              blogData={{ _id: blog._id, title: blog.title, blogText: blog.blogText, img: blog.imageName }}
-              />
-              )
-            }
-            {loading && <LoadingSpinner />}
+        <h1 style={{ textAlign: 'left' }}>Featured</h1>
+        <div ref={featuredPostsRow} className={styles.row}>
 
-          {/* <div className="blog">
-           { posts.map(post => <Blog key={Math.random()} blogData={post} />) }
-            <OutlineButton clickHandler={fetchBtnHandler}>Fetch Posts</OutlineButton>
-          </div> */}
+          <button onClick={slideBackwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
 
+          {posts.map(post => post.marked_as === 'FEATURED' && <BlogCard key={post.post._id} blogData={post.post} />)}
+
+          <button onClick={slideForwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+
+        <h1 style={{ textAlign: 'left' }}>Top Posts</h1>
+        <div ref={topPostsRow} className={styles.row}>
+          
+          <button onClick={slideBackwardTopPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
+
+          {posts.map(post => post.marked_as === 'TOP' && <BlogCard key={post.post._id} blogData={post.post} />)}
+
+          <button onClick={slideForwardTopPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
         </div>
       </main>
     </div>
   )
 }
 
+export async function getStaticProps() {
 
-export const getStaticProps = async () => {
   let BLOG_DATA = [];
   try {
     const client = await MongoClient.connect(
@@ -95,28 +124,24 @@ export const getStaticProps = async () => {
 
     const db = client.db();
 
-    const blogsCollection = db.collection('blogs');
+    const markedPostsCollection = db.collection('marked_posts');
 
-    const blogs = await blogsCollection.find().toArray();
+    const markedPosts = await markedPostsCollection.find().toArray();
 
     client.close();
 
-    blogs.forEach((obj, i) => {
-      blogs[i]._id = obj._id.toString()
-    });
+    BLOG_DATA = markedPosts;
 
-    BLOG_DATA = blogs;
-
-    // console.log('Blog data', BLOG_DATA)
+    // console.log(BLOG_DATA)
 
   } catch (err) {
     console.log('Error form try catch ', err);
   }
-
-
   return {
     props: {
-      blogs: BLOG_DATA,
-    }
+      blogsData: JSON.stringify(BLOG_DATA),
+    },
+    revalidate: 120, //2min
   }
+
 }

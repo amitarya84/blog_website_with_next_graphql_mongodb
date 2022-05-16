@@ -1,6 +1,6 @@
 .outlineBtn{
     padding: 0.5rem 1rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     background-color: transparent;
     border: 1px solid #008080;
     border-radius: 5px;
@@ -9,6 +9,6 @@
     transition: 0.3s ease;
 
     &:hover{
-        background-color: #c5ffff;
+        background-color: rgba($color: #008080, $alpha: 0.1);
     }
 }

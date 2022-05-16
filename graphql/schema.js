@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-micro';
 
 export const typeDefs = gql`
+
     type Blog {
         _id: String,
         title: String,
@@ -8,20 +9,20 @@ export const typeDefs = gql`
         blogText: String
     }
 
-    type Login {
-        username: String,
-        token: String
-    }
-
     type Query {
         blogs: [Blog]!
         singleBlog(id: String!): Blog
-        login(username: String!, password: String!): Login
+    }
+
+    type Res {
+        status: Boolean,
+        message: String
     }
 
     type Mutation {
-        addBlog(title: String!, imageUrl:String!, blogText:String!): Blog!
+        deleteBlog(id: String!): Res!
+        addToMarked(id: String!, mark_as: String!): Res!
     }
-    
+ 
 `;
 

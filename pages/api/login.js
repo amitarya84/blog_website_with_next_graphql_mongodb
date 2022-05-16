@@ -29,12 +29,12 @@ export default async function (req, res) {
 
         if(admin){
             // res.setHeader({})
-            let expirationSeconds = 3600000;
+            let expirationSeconds = 3600;
             const token = jwt.sign({
                 adminId: admin._id.toString(),
                 username: admin.username
             }, SECRET_KEY, { expiresIn: expirationSeconds })
-            res.setHeader('Set-Cookie', `authToken=${token}`)
+            // res.setHeader('Set-Cookie', `authToken=${token}`)
             res.json({
                 message: 'Logged in succesfully!!',
                 loggedIn: true,

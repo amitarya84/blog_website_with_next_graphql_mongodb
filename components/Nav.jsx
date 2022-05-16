@@ -43,7 +43,11 @@ const Nav = () => {
             <div className={styles.logo}>LET&apos;S_BLOG</div>
             <ul>
                 <Link href="/">
-                    <li className={router.pathname === '/' ? styles.activeNavLink : ''}>Feed</li>
+                    <li className={router.pathname === '/' ? styles.activeNavLink : ''}>Home</li>
+                </Link>
+
+                <Link href="/blogs">
+                    <li className={router.pathname === '/blogs' ? styles.activeNavLink : ''}>Blogs</li>
                 </Link>
 
                 {ctx.loggedIn && <Link href="/create-post">

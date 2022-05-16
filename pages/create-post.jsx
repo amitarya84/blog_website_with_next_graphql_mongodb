@@ -1,6 +1,7 @@
 import Head from 'next/head';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useContext } from 'react';
+
 import CreateBlogForm from '../components/CreateBlogForm';
 import { GloabalCtx } from '../context/gloabalCtx';
 
@@ -9,18 +10,24 @@ const CreatePost = () => {
     const ctx = useContext(GloabalCtx);
 
     useEffect(() => {
-        if(!ctx.loggedIn){
-            router.push('/')
+        let timeout = setTimeout(() => {            
+            if (!ctx.loggedIn) {
+                router.push('/')
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(timeout);
         }
     }, [ctx.loggedIn]);
 
     return (
-    <>
-        <Head>
-            <title>Create Blog - LET&apos;S BLOG</title>
-        </Head>
-        <CreateBlogForm />
-    </>
+        <>
+            <Head>
+                <title>Create Blog - LET&apos;S BLOG</title>
+            </Head>
+            <CreateBlogForm />
+        </>
     )
 }
 

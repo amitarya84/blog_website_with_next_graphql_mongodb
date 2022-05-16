@@ -1,8 +1,67 @@
 import { MongoClient, ObjectId } from 'mongodb';
-// import ObjectId from ('mongodb').ObjectId; 
 
 
-const getBlogs = async () => {
+export const resolvers = {
+    Query: {
+        blogs: () => getBlogs(),
+        singleBlog: (_parent, _args) => getSingleBlog(_args.id)
+    },
+    Mutation: {
+        deleteBlog: (_parent, _args) => deleteBlog(_args.id),
+        addToMarked: (_parent, _args) => addToMarked(_args.id, _args.mark_as)
+    }
+}
+
+async function addToMarked(id, mark_as) {
+    console.log('add to marked start')
+    
+    try {
+        const client = await MongoClient.connect(
+            'mongodb://localhost:27017/blogPosts'
+            );
+            
+            const db = client.db();
+            
+            const blogsCollection = db.collection('blogs');
+            
+            const blog = await blogsCollection.findOne({_id: ObjectId(id)});
+            
+            console.log(blog)
+            // client.close();
+            
+            
+            // const db = client.db();
+            
+            const markedBlogsCollection = db.collection('marked_posts');
+
+            const markedBlogExist = await markedBlogsCollection.findOne({ $and: [{"post._id": ObjectId(id)}, {marked_as: mark_as}] })
+            
+            if(markedBlogExist === null){
+
+                const markedBlog = await markedBlogsCollection.insertOne({
+                    marked_as: mark_as,
+                    post: blog
+                });
+                // console.log(blog, markedBlog)
+                client.close();
+                
+                return {
+                    status: true,
+                    message: `Added To ${mark_as} posts Succesfully!`
+                };
+            }
+            
+        } catch (err) {
+            console.log('Error form try catch ', err);
+            throw err
+        }
+        return {
+            status: false,
+            message: "Blog Already added to " + mark_as
+        };
+    }
+    
+    const getBlogs = async () => {
 
     try {
         const client = await MongoClient.connect(
@@ -13,8 +72,6 @@ const getBlogs = async () => {
 
         const blogsCollection = db.collection('blogs');
 
-
-
         const blogs = await blogsCollection.find().toArray();
 
         client.close();
@@ -22,6 +79,7 @@ const getBlogs = async () => {
 
     } catch (err) {
         console.log('Error form try catch ', err);
+        throw err
     }
 }
 
@@ -38,13 +96,12 @@ const getSingleBlog = async (id) => {
         const blogsCollection = db.collection('blogs');
 
         let o_id = new ObjectId(id);
-        console.log('fdlkfj',o_id)
 
         const blog = await blogsCollection.findOne({_id: o_id});
 
 
         client.close();
-        console.log(blog, id)
+        // console.log(blog, id)
         return blog;
 
     } catch (err) {
@@ -52,41 +109,28 @@ const getSingleBlog = async (id) => {
     }
 }
 
+async function deleteBlog(id) {
+    try {
+        const client = await MongoClient.connect(
+            'mongodb://localhost:27017/blogPosts'
+        );
 
-// const updateBlog = async (data) => {
-//     console.log(data)
+        const db = client.db();
 
-//     try {
-//         const client = await MongoClient.connect(
-//             'mongodb://localhost:27017/blogPosts'
-//         );
+        const blogsCollection = db.collection('blogs');
 
-//         const db = client.db();
+        const blog = await blogsCollection.deleteOne({_id: ObjectId(id)});
 
-//         // console.log(db)
+        console.log(blog)
+        client.close();
 
-//         const blogsCollection = db.collection('blogs');
+        return {
+            status: true,
+            message: "Blog Delete Succesfully!"
+        };
 
-//         // console.log('collectinssss: ', blogsCollection)
-
-//         const result = await blogsCollection.insertOne(data);
-
-//         client.close();
-//         console.log('result ', result)
-//         return {_id: result.insertedId};
-
-//     } catch (err) {
-//         console.log('Error form try catch ', err);
-//     }
-
-// }
-
-export const resolvers = {
-    Query: {
-        blogs: () => getBlogs(),
-        singleBlog: (_parent, _args) => getSingleBlog(_args.id)
-    },
-    // Mutation: {
-    //     addBlog: (_parant, _args) => updateBlog(_args)
-    // }
+    } catch (err) {
+        console.log('Error form try catch ', err);
+    }
 }
+

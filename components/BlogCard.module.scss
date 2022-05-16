@@ -1,0 +1,45 @@
+.blogCard{
+    min-width: 300px;
+    width: 300px;
+    text-align: left;
+    border-radius: 10px;
+    // border: 2px solid #00B3B3;
+    background-color: rgba(255, 255, 255);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 5px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+
+    h2{
+        margin-top: 10px;
+        margin-bottom: 0;
+        font-size: 1.3rem;
+        line-height: 24px;
+        text-transform: uppercase;
+    }
+
+    p{
+        margin-top: 5px;
+        text-align: justify;
+    }
+
+    .img{
+        width: 100%;
+        border-radius: 5px;
+        padding: 0;
+        margin: 0;
+        max-height: 200px;
+        height: 200px;
+        overflow: hidden;
+        // display: flex;
+
+        img{
+            width: 100%;
+
+        }
+    }
+}
+

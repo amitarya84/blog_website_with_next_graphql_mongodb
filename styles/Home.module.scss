@@ -2,8 +2,6 @@
   padding: 0 2rem;
   text-align: center;
 }
-
-
 .noPost{
   color: #9bcece;
   text-transform: uppercase;
@@ -20,6 +18,7 @@
     margin: 10px auto;
     width: 50%;
   }
+
   h1{
     text-transform: uppercase;
     text-align: center;
@@ -33,4 +32,40 @@
     text-align: center;
     white-space: pre-wrap;
   }
+}
+
+.row{
+  position: relative;
+  display: flex;
+  width: 100%;
+  // background-color: rgba(0,0,0,0.1);
+  // padding: 40px 20px;
+  border-radius: 10px;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  &::-webkit-scrollbar{
+    display: none;
+  }
+}
+
+.floatingBtn{
+  position: sticky;
+  top: 50%;
+  min-width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: white;
+  border: none;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+
+}
+.prevBtn{
+  left: 5px;
+}
+.forwardBtn{
+  right: 5px;
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import FormData from 'form-data';
 
@@ -6,12 +6,18 @@ import styles from './CreateBlogForm.module.scss';
 import axios from 'axios';
 
 
-const CreateBlogForm = ({ submitHandler }) => {
+const EditBlogForm = ({ blogData }) => {
     const [loading, setLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState();
     const [title, setTitle] = useState('');
     const [imageFile, setImageFile] = useState();
     const [para, setPara] = useState('');
+
+    useEffect(() => {
+        console.log(blogData)
+        setTitle(blogData.title);
+        setPara(blogData.blogText);
+    }, []);
 
     function titleChangeHandler(e) {
         setTitle(e.target.value)
@@ -38,9 +44,6 @@ const CreateBlogForm = ({ submitHandler }) => {
 
     function submitHandler(e) {
         e.preventDefault();
-        // console.log(title)
-        // console.log(imageFile)
-        // console.log(para)
 
         let validated = (title.trim() && para.trim());
 
@@ -49,6 +52,7 @@ const CreateBlogForm = ({ submitHandler }) => {
 
             let formdata = new FormData();
 
+            formdata.append("id", blogData._id)
             formdata.append("title", title);
             formdata.append("imageFile", imageFile);
             formdata.append("paragraph", para);
@@ -60,7 +64,7 @@ const CreateBlogForm = ({ submitHandler }) => {
                 },
             };
 
-            axios.post('/api/addBlog', formdata, config)
+            axios.post('/api/editBlog', formdata, config)
                 .then(res => {
                     setLoading(false)
                     Router.push(`/blogs/${res.data._id}`)
@@ -79,7 +83,7 @@ const CreateBlogForm = ({ submitHandler }) => {
         <form onSubmit={submitHandler} className={styles.formControl}>
             <h2>Let&apos;s create a blog!!</h2>
             <label >
-                <input onChange={titleChangeHandler} type="text" placeholder='Enter Blog Title..' />
+                <input value={title} onChange={titleChangeHandler} type="text" placeholder='Enter Blog Title..' />
             </label>
             <div className={styles.outline}>
 
@@ -90,7 +94,7 @@ const CreateBlogForm = ({ submitHandler }) => {
                 </label>
             </div>
             <label >
-                <textarea onChange={paragraphChangeHandler} name="blog-paragraph" id="blogPara" cols="30" rows="10" placeholder='Enter Paragraph..'></textarea>
+                <textarea value={para} onChange={paragraphChangeHandler} name="blog-paragraph" id="blogPara" cols="30" rows="10" placeholder='Enter Paragraph..'></textarea>
             </label>
             <br /><br />
             <button className={styles.postBlogBtn} style={loading ? { backgroundColor: 'gray' } : {}}>Post Blog</button>
@@ -98,4 +102,4 @@ const CreateBlogForm = ({ submitHandler }) => {
     );
 }
 
-export default CreateBlogForm;
+export default EditBlogForm;

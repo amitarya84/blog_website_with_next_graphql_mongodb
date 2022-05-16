@@ -5,12 +5,14 @@ import { GloabalCtxProvider } from '../context/gloabalCtx'
 function MyApp({ Component, pageProps }) {
 
   return (
-    <GloabalCtxProvider >
-      <Nav />
-      <Component {...pageProps} />
-    </GloabalCtxProvider>
+    <>
+      <GloabalCtxProvider >
+        <Nav />
+        <Component {...pageProps} />
+      </GloabalCtxProvider>
+    </>
   )
-  
+
 }
 
 export default MyApp

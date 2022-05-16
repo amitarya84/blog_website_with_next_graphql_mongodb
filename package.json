@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.2",
     "apollo-server-micro": "^3.7.0",
+    "apollo-upload-client": "^17.0.0",
     "axios": "^0.27.2",
     "graphql": "^16.4.0",
     "jsonwebtoken": "^8.5.1",
