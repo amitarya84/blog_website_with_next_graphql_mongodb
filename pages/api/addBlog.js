@@ -36,12 +36,11 @@ apiRoute.post(async(req, res) => {
     imageName: imageName
   }
 
-  try {
-    const client = await MongoClient.connect(
-        'mongodb://localhost:27017/blogPosts'
-    );
 
-    const db = client.db();
+  try {
+    const client = await MongoClient.connect(process.env.MONGO_URI);
+
+    const db = client.db('blogPosts');
 
 
     const blogsCollection = db.collection('blogs');

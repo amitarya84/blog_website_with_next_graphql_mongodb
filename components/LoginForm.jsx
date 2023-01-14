@@ -4,17 +4,19 @@ import {useRouter} from 'next/router';
 import styles from './LoginForm.module.scss';
 import FilledBtn from './UI/FilledBtn';
 import { GloabalCtx } from '../context/gloabalCtx';
+import LoadingSpinner from './UI/LoadingSpinner';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setpassword] = useState('');
+    const [loggingIn, setLoggingIn] = useState(false);
 
     const ctx = useContext(GloabalCtx)
     const router = useRouter();
 
     const loginHandler = e => {
         e.preventDefault();
-
+        setLoggingIn(true);
         axios.post('/api/login', {
             username: username,
             password: password
@@ -26,6 +28,7 @@ const LoginForm = () => {
                 ctx.setLoggedIn(true)
                 router.push('/')
             }
+            setLoggingIn(false)
         })
 
     }
@@ -40,9 +43,9 @@ const LoginForm = () => {
             <input onChange={userNameInputChangeHandler} type="text" placeholder='Enter Username' />
             <input onChange={passwordInputChangeHandler} type="password" placeholder='Enter Password' />
 
-            <FilledBtn >
-                Login
-            </FilledBtn>
+        
+            {!loggingIn && <FilledBtn >Login</FilledBtn>}
+            {loggingIn && <LoadingSpinner style={{width: '50px', height: '50px'}} />}
         </form>
     );
 }

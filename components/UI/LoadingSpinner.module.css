@@ -6,9 +6,12 @@
   .spinner:after {
     content: ' ';
     display: block;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
+    width: 80%;
+    height: 80%;
+    /* width: 64px;
+    height: 64px; */
+    /* margin: 8px; */
+    margin: auto;
     border-radius: 50%;
     border: 6px solid teal;
     border-color: teal transparent teal transparent;

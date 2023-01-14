@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 import jwt from "jsonwebtoken";
 
-export const SECRET_KEY = "OUR_SECRET";
+export const SECRET_KEY = process.env.SECRET_KEY;
 
 export default async function (req, res) {
 
@@ -11,12 +11,13 @@ export default async function (req, res) {
     const password = req.body.password;
 
     try {
-        const client = await MongoClient.connect('mongodb://localhost:27017/blogPosts');
+        const client = await MongoClient.connect(`${process.env.MONGO_URI}`);
 
-        const db = client.db();
+        const db = client.db('blogPosts');
+
+        const collectionNames = db.listCollections().toArray();
 
         const admins = db.collection('admins');
-
 
         const admin = await admins.findOne({
             username: username,
@@ -25,7 +26,7 @@ export default async function (req, res) {
 
 
         client.close();
-        console.log(admin)
+        console.log('dbData', admin)
 
         if(admin){
             // res.setHeader({})

@@ -1,0 +1,16 @@
+.line {
+    height: 4px;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background-image: linear-gradient(to left, #02c7c7, #008080);
+    animation: progressLine 1200ms ease infinite;
+    background-size: 200%;
+}
+
+@keyframes progressLine {
+    0%{
+        background-position: 200%;
+    }
+}

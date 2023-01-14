@@ -60,6 +60,12 @@ const Blog = ({ blogData }) => {
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
+                    console.log(data.data.deleteBlog.status)
+                    if(data.data.deleteBlog.status){
+                        console.log('redirecting')
+                        alert('BLog Deleted Successfully!')
+                        router.push('/blogs')
+                    }
                     // router.reload(window.location.pathname)
                 })
                 .catch(err => console.log(err))

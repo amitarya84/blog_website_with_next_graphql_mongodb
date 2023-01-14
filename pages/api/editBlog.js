@@ -44,10 +44,10 @@ apiRoute.post(async(req, res) => {
 
   try {
     const client = await MongoClient.connect(
-        'mongodb://localhost:27017/blogPosts'
+        `${process.env.MONGO_URI}`
     );
 
-    const db = client.db();
+    const db = client.db('blogPosts');
 
 
     const blogsCollection = db.collection('blogs');

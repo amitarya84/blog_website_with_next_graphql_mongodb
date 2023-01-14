@@ -50,6 +50,7 @@ export default function Home({ blogsData }) {
   //     .then(res => res.json())
   //     .then(data => {
   //       setLoading(false);
+  //       console.log('blogs data', data.data.blogs)
   //       setPosts(data.data.blogs)
 
   //     }).catch(err => {
@@ -82,33 +83,42 @@ export default function Home({ blogsData }) {
       </Head>
 
       <main>
-        <h1 style={{ textAlign: 'left' }}>Featured</h1>
-        <div ref={featuredPostsRow} className={styles.row}>
+        {(posts.length > 0) ? <>
+          <h1 className={styles.secHeading} style={{ textAlign: 'left' }}>Featured</h1>
+          <div ref={featuredPostsRow} className={styles.row}>
 
-          <button onClick={slideBackwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
-            <span className="material-symbols-outlined">chevron_left</span>
-          </button>
+            <button onClick={slideBackwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
+              <span className="material-symbols-outlined">chevron_left</span>
+            </button>
 
-          {posts.map(post => post.marked_as === 'FEATURED' && <BlogCard key={post.post._id} blogData={post.post} />)}
+            {posts.map(post => post.marked_as === 'FEATURED' && <BlogCard key={post.post._id} blogData={post.post} />)}
 
-          <button onClick={slideForwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
-            <span className="material-symbols-outlined">chevron_right</span>
-          </button>
-        </div>
+            <button onClick={slideForwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
+              <span className="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+        </>
+          :
+          <h1 style={{ color: '#0080805e' }}>No Featured Post to show</h1>
+        }
 
-        <h1 style={{ textAlign: 'left' }}>Top Posts</h1>
-        <div ref={topPostsRow} className={styles.row}>
-          
-          <button onClick={slideBackwardTopPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
-            <span className="material-symbols-outlined">chevron_left</span>
-          </button>
+        {(posts.length > 0) ? <>
+          <h1 className={styles.secHeading} style={{ textAlign: 'left' }}>Top Posts</h1>
+          <div ref={topPostsRow} className={styles.row}>
 
-          {posts.map(post => post.marked_as === 'TOP' && <BlogCard key={post.post._id} blogData={post.post} />)}
+            <button onClick={slideBackwardTopPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
+              <span className="material-symbols-outlined">chevron_left</span>
+            </button>
 
-          <button onClick={slideForwardTopPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
-            <span className="material-symbols-outlined">chevron_right</span>
-          </button>
-        </div>
+            {posts.map(post => post.marked_as === 'TOP' && <BlogCard key={post.post._id} blogData={post.post} />)}
+
+            <button onClick={slideForwardTopPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
+              <span className="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div></>
+          :
+          <h1 style={{ color: '#0080805e' }}>No Top Post to show</h1>
+        }
       </main>
     </div>
   )
@@ -119,10 +129,10 @@ export async function getStaticProps() {
   let BLOG_DATA = [];
   try {
     const client = await MongoClient.connect(
-      'mongodb://localhost:27017/blogPosts'
+      `${process.env.MONGO_URI}`
     );
 
-    const db = client.db();
+    const db = client.db('blogPosts');
 
     const markedPostsCollection = db.collection('marked_posts');
 

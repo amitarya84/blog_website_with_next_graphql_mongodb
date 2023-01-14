@@ -46,31 +46,37 @@ export default function Blogs({ blogs }) {
 export async function getServerSideProps() {
 
     let BLOG_DATA = [];
-    try {
-        const client = await MongoClient.connect(
-            'mongodb://localhost:27017/blogPosts'
-        );
 
-        const db = client.db();
+    if (BLOG_DATA.length < 1) {
+        console.log('getting blogs')
+        try {
+            const client = await MongoClient.connect(
+                `${process.env.MONGO_URI}`
+            );
 
-        const blogsCollection = db.collection('blogs');
+            const db = client.db('blogPosts');;
 
-        const blogs = await blogsCollection.find().toArray();
+            const blogsCollection = db.collection('blogs');
 
-        client.close();
+            const blogs = await blogsCollection.find().toArray();
 
-        blogs.forEach((obj, i) => {
-            blogs[i]._id = obj._id.toString()
-        });
+            client.close();
 
-        BLOG_DATA = blogs;
+            blogs.forEach((obj, i) => {
+                blogs[i]._id = obj._id.toString()
+            });
 
-        // console.log('Blog data', BLOG_DATA)
+            BLOG_DATA = blogs;
 
-    } catch (err) {
-        console.log('Error form try catch ', err);
+            // console.log('Blog data', BLOG_DATA)
+
+        } catch (err) {
+            console.log('Error form try catch ', err);
+        }
+
+    }else{
+        console.log('we have some blogs')
     }
-
 
     return {
         props: {
