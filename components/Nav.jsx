@@ -14,17 +14,17 @@ const Nav = () => {
 
 
     useEffect(() => {
-        console.log('useEffect run')
+        // console.log('useEffect run')
         const token = localStorage.getItem('authToken');
-        console.log(token)
+        // console.log(token)
         if (token) {
             axios.post('/api/verifyToken', { authToken: token })
                 .then(res => {
                     const verified = JSON.parse(res.data).verified;
-                    console.log(JSON.parse(res.data), verified)
+                    // console.log(JSON.parse(res.data), verified)
                     if (verified) {
                         ctx.setLoggedIn(true)
-                        console.log(ctx.loggedIn)
+                        // console.log(ctx.loggedIn)
                     } else {
                         router.push('/')
                     }

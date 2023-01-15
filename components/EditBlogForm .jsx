@@ -17,7 +17,7 @@ const EditBlogForm = ({ blogData }) => {
         console.log(blogData)
         setTitle(blogData.title);
         setPara(blogData.blogText);
-    }, []);
+    }, [blogData]);
 
     function titleChangeHandler(e) {
         setTitle(e.target.value)
@@ -97,7 +97,7 @@ const EditBlogForm = ({ blogData }) => {
                 <textarea value={para} onChange={paragraphChangeHandler} name="blog-paragraph" id="blogPara" cols="30" rows="10" placeholder='Enter Paragraph..'></textarea>
             </label>
             <br /><br />
-            <button className={styles.postBlogBtn} style={loading ? { backgroundColor: 'gray' } : {}}>Post Blog</button>
+            <button className={styles.postBlogBtn} style={loading ? { backgroundColor: 'gray' } : {}}>Update Blog</button>
         </form>
     );
 }

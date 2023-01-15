@@ -65,7 +65,7 @@ const getBlogs = async () => {
 
     try {
         const client = await MongoClient.connect(
-            `${process.env.MONGO_URI}/blogPosts`
+            `${process.env.MONGO_URI}`
         );
 
         const db = client.db('blogPosts');
@@ -88,7 +88,7 @@ const getSingleBlog = async (id) => {
 
     try {
         const client = await MongoClient.connect(
-            `{${process.env.MONGO_URI}`
+            `${process.env.MONGO_URI}`
         );
 
         const db = client.db('blogPosts');
