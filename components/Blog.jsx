@@ -132,7 +132,8 @@ const Blog = ({ blogData }) => {
     }
     return (
         <div className={styles.blog}>
-            {blogData.img ? <img className={styles.img} src={'./uploads/' + blogData.img} /> : <div className={styles.blankImg} />}
+            {/* {blogData.img ? <img className={styles.img} src={'./uploads/' + blogData.img} /> : <div className={styles.blankImg} />} */}
+            {blogData.img ? <img className={styles.img} src={blogData.img} /> : <div className={styles.blankImg} />}
             <div>
                 <h2>{blogData.title}</h2>
                 <p>{previewText}</p>

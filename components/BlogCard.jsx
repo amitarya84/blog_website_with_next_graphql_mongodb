@@ -27,7 +27,8 @@ const Blog = ({ blogData }) => {
     // console.log(blogData)
     return (
         <div className={styles.blogCard}>
-            {blogData.img ? <figure className={styles.img}><img src={'./uploads/' + blogData.img} /></figure> : <div className={styles.blankImg} />}
+            {/* {blogData.img ? <figure className={styles.img}><img src={'./uploads/' + blogData.img} /></figure> : <div className={styles.blankImg} />} */}
+            {blogData.img ? <figure className={styles.img}><img src={blogData.img} /></figure> : <div className={styles.blankImg} />}
             <div>
                 <h2>{blogData.title}</h2>
                 <p>{previewText}</p>

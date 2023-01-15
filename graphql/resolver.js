@@ -140,14 +140,15 @@ async function deleteBlog(id) {
 async function deleteMarkedBlog(id) {
     try {
         const client = await MongoClient.connect(
-            `${process.env.MONGO_URI}/blogPosts`
+            `${process.env.MONGO_URI}`
         );
 
         const db = client.db('blogPosts');
 
         const blogsCollection = db.collection('marked_posts');
 
-        const blog = await blogsCollection.deleteOne({ "post._id": ObjectId(id) });
+        const blog = await blogsCollection.deleteMany({ "post._id": ObjectId(id) });
+        // const blog = await blogsCollection.deleteOne({ "post._id": ObjectId(id) });
 
         console.log(blog)
         client.close();

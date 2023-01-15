@@ -142,7 +142,8 @@ const Id = ({ blog }) => {
                         style={{ left: 'unset', right: '20px' }}
                     />}
                 </button>}
-                {blog.imageName && <img className={styles.image} src={'../uploads/' + blog.imageName} alt="blog image" />}
+                {/* {blog.imageName && <img className={styles.image} src={'../uploads/' + blog.imageName} alt="blog image" />} */}
+                {blog.imageName && <img className={styles.image} src={blog.imageName} alt="blog image" />}
                 <h1 className={styles.title}>{blog.title}</h1>
                 <div className={styles.paragraph}>{blog.blogText}</div>
             </div>

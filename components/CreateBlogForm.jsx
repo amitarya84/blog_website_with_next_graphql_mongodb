@@ -47,20 +47,34 @@ const CreateBlogForm = ({ submitHandler }) => {
         if (validated) {
             setLoading(true)
 
-            let formdata = new FormData();
+            // let formdata = new FormData();
 
-            formdata.append("title", title);
-            formdata.append("imageFile", imageFile);
-            formdata.append("paragraph", para);
+            // formdata.append("title", title);
+            // formdata.append("imageFile", imageFile);
+            // formdata.append("paragraph", para);
 
+            // const config = {
+            //     headers: { "content-type": "multipart/form-data" },
+            //     onUploadProgress: (event) => {
+            //         console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
+            //     },
+            // };
+
+            let formdata = JSON.stringify({
+                title: title,
+                paragraph: para,
+                imageFile: imagePreview
+            })
             const config = {
-                headers: { "content-type": "multipart/form-data" },
+                headers: { "Content-Type": "application/json" },
+                body: formdata,
                 onUploadProgress: (event) => {
                     console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
                 },
             };
 
-            axios.post('/api/addBlog', formdata, config)
+
+            axios.post('/api/addBlog', config)
                 .then(res => {
                     setLoading(false)
                     Router.push(`/blogs/${res.data._id}`)
@@ -69,6 +83,16 @@ const CreateBlogForm = ({ submitHandler }) => {
                     setLoading(false)
                     console.log(err)
                 })
+
+            // axios.post('/api/addBlog', formdata, config)
+            //     .then(res => {
+            //         setLoading(false)
+            //         Router.push(`/blogs/${res.data._id}`)
+            //     })
+            //     .catch(err => {
+            //         setLoading(false)
+            //         console.log(err)
+            //     })
         } else {
             alert('Please fill the form first!')
         }
