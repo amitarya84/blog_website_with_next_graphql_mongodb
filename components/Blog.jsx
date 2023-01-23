@@ -6,6 +6,7 @@ import OutlineButton from './UI/OutlineButton';
 import LoadingSpinner from './UI/LoadingSpinner';
 import PostOptions from './PostOptions';
 import { GloabalCtx } from '../context/gloabalCtx';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const Blog = ({ blogData }) => {
     const [loading, setLoading] = useState(false);
@@ -61,7 +62,7 @@ const Blog = ({ blogData }) => {
                 .then(data => {
                     console.log(data)
                     console.log(data.data.deleteBlog.status)
-                    if(data.data.deleteBlog.status){
+                    if (data.data.deleteBlog.status) {
                         console.log('redirecting')
                         alert('BLog Deleted Successfully!')
                         router.push('/blogs')
@@ -89,15 +90,15 @@ const Blog = ({ blogData }) => {
                 query: query
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            let dataObj = data.data.addToMarked;
-            alert(dataObj.message)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                let dataObj = data.data.addToMarked;
+                alert(dataObj.message)
 
-            // router.reload(window.location.pathname)
-        })
-        .catch(err => console.log(err))
+                // router.reload(window.location.pathname)
+            })
+            .catch(err => console.log(err))
     }
 
     const addToTopPostsHandler = () => {
@@ -117,22 +118,21 @@ const Blog = ({ blogData }) => {
                 query: query
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-            let dataObj = data.data.addToMarked;
-            alert(dataObj.message)
-            // router.reload(window.location.pathname)
-        })
-        .catch(err => console.log(err))
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                let dataObj = data.data.addToMarked;
+                alert(dataObj.message)
+                // router.reload(window.location.pathname)
+            })
+            .catch(err => console.log(err))
     }
 
     const editBlogHandler = () => {
-        router.push('/edit-post/'+blogData._id)
+        router.push('/edit-post/' + blogData._id)
     }
     return (
         <div className={styles.blog}>
-            {/* {blogData.img ? <img className={styles.img} src={'./uploads/' + blogData.img} /> : <div className={styles.blankImg} />} */}
             {blogData.img ? <img className={styles.img} src={blogData.img} /> : <div className={styles.blankImg} />}
             <div>
                 <h2>{blogData.title}</h2>
@@ -141,12 +141,13 @@ const Blog = ({ blogData }) => {
                 {!loading && <OutlineButton clickHandler={readMoreClickHandler} >Read More..</OutlineButton>}
             </div>
             {ctx.loggedIn && <button onBlur={optionsBlurHandler} onClick={optionsBtnClickHandler} className={styles.post_options_btn}>
-                <span className="material-symbols-outlined">more_vert</span>
-                {optionsOn && <PostOptions 
-                deleteBlogHandler={deleteBlogHandler} 
-                addToFeaturedHandler={addToFeaturedHandler}
-                addToTopPostsHandler={addToTopPostsHandler}
-                editBlogHandler={editBlogHandler}
+                {/* <span className="material-symbols-outlined">more_vert</span> */}
+                <BsThreeDotsVertical />
+                {optionsOn && <PostOptions
+                    deleteBlogHandler={deleteBlogHandler}
+                    addToFeaturedHandler={addToFeaturedHandler}
+                    addToTopPostsHandler={addToTopPostsHandler}
+                    editBlogHandler={editBlogHandler}
                 />}
             </button>}
         </div>

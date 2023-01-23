@@ -4,6 +4,11 @@ import { MongoClient } from 'mongodb';
 import { useState, useEffect, useRef } from 'react';
 import styles from '../styles/Home.module.scss'
 import BlogCard from '../components/BlogCard';
+import {
+  AiOutlineRight,
+  AiOutlineDoubleRight,
+  AiOutlineDoubleLeft
+} from 'react-icons/ai';
 
 
 export default function Home({ blogsData }) {
@@ -88,13 +93,13 @@ export default function Home({ blogsData }) {
           <div ref={featuredPostsRow} className={styles.row}>
 
             <button onClick={slideBackwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
-              <span className="material-symbols-outlined">chevron_left</span>
+              <AiOutlineDoubleLeft />
             </button>
 
             {posts.map(post => post.marked_as === 'FEATURED' && <BlogCard key={post.post._id} blogData={post.post} />)}
 
             <button onClick={slideForwardFeaturedPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
-              <span className="material-symbols-outlined">chevron_right</span>
+              <AiOutlineDoubleRight />
             </button>
           </div>
         </>
@@ -107,13 +112,13 @@ export default function Home({ blogsData }) {
           <div ref={topPostsRow} className={styles.row}>
 
             <button onClick={slideBackwardTopPosts} className={`${styles.floatingBtn} ${styles.prevBtn}`}>
-              <span className="material-symbols-outlined">chevron_left</span>
+              <AiOutlineDoubleLeft />
             </button>
 
             {posts.map(post => post.marked_as === 'TOP' && <BlogCard key={post.post._id} blogData={post.post} />)}
 
             <button onClick={slideForwardTopPosts} className={`${styles.floatingBtn} ${styles.forwardBtn}`}>
-              <span className="material-symbols-outlined">chevron_right</span>
+              <AiOutlineDoubleRight />
             </button>
           </div></>
           :

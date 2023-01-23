@@ -5,6 +5,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 import styles from '../../styles/Home.module.scss';
 import { GloabalCtx } from '../../context/gloabalCtx';
 import PostOptions from '../../components/PostOptions';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 
 
 const optionBtnStyles = {
@@ -21,7 +22,7 @@ const Id = ({ blog }) => {
     const [optionsOn, setOptionsOn] = useState(false);
     const ctx = useContext(GloabalCtx);
 
-    console.log('blog from client', blog)
+    // console.log('blog from client', blog)
     const router = useRouter();
 
     const optionsBtnClickHandler = () => {
@@ -133,7 +134,8 @@ const Id = ({ blog }) => {
             </Head>
             <div className={styles.blog}>
                 {ctx.loggedIn && <button onBlur={optionsBlurHandler} onClick={optionsBtnClickHandler} style={{ ...optionBtnStyles }}>
-                    <span className="material-symbols-outlined">more_vert</span>
+                    {/* <span className="material-symbols-outlined">more_vert</span> */}
+                    <BsThreeDotsVertical />
                     {optionsOn && <PostOptions
                         deleteBlogHandler={deleteBlogHandler}
                         addToFeaturedHandler={addToFeaturedHandler}
@@ -190,43 +192,4 @@ export const getServerSideProps = async (req) => {
             blog: BLOG,
         }
     }
-
-    // console.log('req',req.req.rawHeaders.indexOf('Host'))
-    // const rawHeaders = req.req.rawHeaders;
-    // const hostNameIndex = rawHeaders.indexOf('Host');
-    // const hostName = rawHeaders[hostNameIndex + 1];
-
-    // // const protocol = req.headers['x-forwarded-proto'] || 'http'
-    // // const baseUrl = req ? `${protocol}://${req.headers.host}` : ''
-
-    // let query = `
-    //     query Query {
-    //     singleBlog (id: "${id}") {
-    //         _id
-    //         title
-    //         imageName
-    //         blogText
-    //   }
-    // }
-    // `
-    // const res = await fetch(hostName+'/api/graphql', {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //         query: query
-    //     })
-    // });
-    // const data = await res.json();
-    // console.log('clientside se',data)
-
-    // return {
-    //     props: {
-    //         blog: data.data.singleBlog,
-    //     }
-    // }
-    // return {
-    //     props: {
-    //         blog: {},
-    //     }
-    // }
 }

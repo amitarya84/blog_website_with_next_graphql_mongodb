@@ -5,7 +5,7 @@ import { useEffect, useContext, useState } from 'react';
 import EditBlogForm from '../../components/EditBlogForm ';
 import { GloabalCtx } from '../../context/gloabalCtx';
 
-const EditPost = ({blogData}) => {
+const EditPost = () => {
     const router = useRouter();
     const ctx = useContext(GloabalCtx);
     const [blogDataa, setBlogDataa] = useState({})
@@ -25,7 +25,7 @@ const EditPost = ({blogData}) => {
     useEffect(() => {
         let fetchData = async () => {
             let id = router.query.id;
-            console.log('queryID',router, id)
+            // console.log('queryID',router, id)
 
             let query = `
                     query Query {
@@ -46,11 +46,11 @@ const EditPost = ({blogData}) => {
             });
             const data = await res.json();
             setBlogDataa(data.data.singleBlog)
-            console.log('data', data)
+            // console.log('data', data)
         }
         fetchData();
-        
-    }, []) 
+        // console.log('[id] edit post')
+    }, [router.query.id]) 
 
     return (
         <>
@@ -63,39 +63,3 @@ const EditPost = ({blogData}) => {
 }
 
 export default EditPost;
-
-
-// export const getServerSideProps = async (req) => {
-
-//     const id = req.query.id;
-//     // console.log(req.req.rawHeaders)
-//     let indexOfHost = req.req.rawHeaders.indexOf('host');
-//     let hostName = req.req.rawHeaders[indexOfHost + 2]
-    
-
-//     let query = `
-//         query Query {
-//         singleBlog (id: "${id}") {
-//             _id
-//             title
-//             imageName
-//             blogText
-//       }
-//     }
-//     `
-//     const res = await fetch('/api/graphql', {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//             query: query
-//         })
-//     });
-//     const data = await res.json();
-//     console.log('clientside se',data)
-
-//     return {
-//         props: {
-//             blogData: data.data.singleBlog,
-//         }
-//     }
-// }

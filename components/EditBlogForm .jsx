@@ -14,9 +14,9 @@ const EditBlogForm = ({ blogData }) => {
     const [para, setPara] = useState('');
 
     useEffect(() => {
-        console.log(blogData)
-        setTitle(blogData.title);
-        setPara(blogData.blogText);
+        // console.log(blogData)
+        setTitle(blogData?.title);
+        setPara(blogData?.blogText);
     }, [blogData]);
 
     function titleChangeHandler(e) {
@@ -45,26 +45,60 @@ const EditBlogForm = ({ blogData }) => {
     function submitHandler(e) {
         e.preventDefault();
 
-        let validated = (title.trim() && para.trim());
+        let validated = (title?.trim() && para?.trim());
 
         if (validated) {
             setLoading(true)
 
-            let formdata = new FormData();
+            // let formdata = new FormData();
 
-            formdata.append("id", blogData._id)
-            formdata.append("title", title);
-            formdata.append("imageFile", imageFile);
-            formdata.append("paragraph", para);
+            // formdata.append("id", blogData._id)
+            // formdata.append("title", title);
+            // formdata.append("imageFile", imageFile);
+            // formdata.append("paragraph", para);
+
+            // const config = {
+            //     headers: { "content-type": "multipart/form-data" },
+            //     onUploadProgress: (event) => {
+            //         console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
+            //     },
+            // };
+
+            //     axios.post('/api/editBlog', formdata, config)
+            //         .then(res => {
+            //             setLoading(false)
+            //             Router.push(`/blogs/${res.data._id}`)
+            //         })
+            //         .catch(err => {
+            //             setLoading(false)
+            //             console.log(err)
+            //         })
+            // } else {
+            //     alert('Please fill the form first!')
+            // }
+
+            let formdata = {
+                id: blogData._id,
+                title: title,
+                paragraph: para,
+            }
+            if (imagePreview) {
+                formdata['imageFile'] = imagePreview;
+            }
+            formdata = JSON.stringify(formdata);
+
+            // console.log('formDat from edit', formdata)
 
             const config = {
-                headers: { "content-type": "multipart/form-data" },
+                headers: { "Content-Type": "application/json" },
+                body: formdata,
                 onUploadProgress: (event) => {
                     console.log(`Current progress:`, Math.round((event.loaded * 100) / event.total));
                 },
             };
 
-            axios.post('/api/editBlog', formdata, config)
+
+            axios.post('/api/editBlog', config)
                 .then(res => {
                     setLoading(false)
                     Router.push(`/blogs/${res.data._id}`)
@@ -73,12 +107,10 @@ const EditBlogForm = ({ blogData }) => {
                     setLoading(false)
                     console.log(err)
                 })
-        } else {
-            alert('Please fill the form first!')
-        }
 
+        }
     }
-    
+
     return (
         <form onSubmit={submitHandler} className={styles.formControl}>
             <h2>Let&apos;s create a blog!!</h2>
@@ -90,7 +122,12 @@ const EditBlogForm = ({ blogData }) => {
                 <label >
                     Choose an image file:
                     <input type="file" onChange={fileInputChangeHandler} />
-                    {imagePreview && <figure><img className={styles.previewImage} src={imagePreview} alt="blog image preview" /></figure>}
+                    {imagePreview && <figure>
+                        <img className={styles.previewImage} src={imagePreview} alt="blog image preview" />
+                    </figure>}
+                    {(!imagePreview && blogData?.imageName) && <figure>
+                        <img className={styles.previewImage} src={blogData.imageName} alt="blog image preview" />
+                    </figure>}
                 </label>
             </div>
             <label >
